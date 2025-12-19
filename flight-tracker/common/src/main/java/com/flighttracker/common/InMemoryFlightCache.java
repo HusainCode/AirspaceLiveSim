@@ -1,10 +1,18 @@
 package com.flighttracker.common;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-public interface FlightCache {
+import java.time.Duration;
 
-    Mono<Flight> get(String flightNumber);
+@Component
+public class InMemoryFlightCache implements FlightCache {
 
-    Mono<Void> put(String flightNumber, Flight flight);
+    private final Cache<String, Flight> cache = Caffeine.newBuilder()
+            .maximumSize(10_000)
+            .expireAfterWrite(Duration.ofMinutes(10))
+            .build();
+
 }

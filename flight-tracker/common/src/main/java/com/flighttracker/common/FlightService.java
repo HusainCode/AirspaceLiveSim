@@ -6,12 +6,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import reactor.core.publisher.Mono;
 
-
 // https://rapidapi.com/aedbx-aedbx/api/aerodatabox/playground/apiendpoint_97755564-247f-411f-bef2-ad26a453e389
 // 1 GET /flights/airports/icao/{airport}/departures
 // 2 GET /flights/airports/icao/{airport}/arrivals
 // 3 GET /flights/{flight-number}/status
 
+@Service
 public class FlightService {
 
     // private static final Logger LOGGER = Logger.getLogger(null)
