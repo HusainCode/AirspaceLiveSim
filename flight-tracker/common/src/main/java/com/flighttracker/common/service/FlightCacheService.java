@@ -1,3 +1,11 @@
+package com.flighttracker.common.service;
+
+import com.flighttracker.common.cache.FlightCache;
+import com.flighttracker.common.model.Flight;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+
 @Service
 public class FlightCacheService {
 
@@ -17,5 +25,11 @@ public class FlightCacheService {
                         remoteCache.get(flightNumber)
                                 .flatMap(flight -> localCache.put(flightNumber, flight)
                                         .thenReturn(flight)));
+    }
+
+    public Mono<Void> put(String flightNumber, Flight flight) {
+        return Mono.when(
+                localCache.put(flightNumber, flight),
+                remoteCache.put(flightNumber, flight));
     }
 }
