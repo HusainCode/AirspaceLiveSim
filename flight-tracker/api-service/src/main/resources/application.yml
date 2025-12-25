@@ -21,6 +21,10 @@ flight:
     remote:
       ttl-minutes: 30 # L2 Redis cache TTL
 
+opensky:
+  client-id: ${OPENSKY_CLIENT_ID}
+  client-secret: ${OPENSKY_CLIENT_SECRET}
+
 logging:
   level:
     root: INFO

@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.flighttracker.api",
         "com.flighttracker.common"
 })
+@EnableConfigurationProperties(OpenSkyProperties.class)
 public class ApiApplication {
 
     public static void main(String[] args) {
