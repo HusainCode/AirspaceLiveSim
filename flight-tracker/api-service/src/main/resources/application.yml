@@ -1,4 +1,6 @@
-# API service configuration
+# API Service Configuration
+# External configuration file defining server port, Redis connection,
+# cache TTLs, OpenSky credentials, and logging levels.
 spring:
   application:
     name: api-service

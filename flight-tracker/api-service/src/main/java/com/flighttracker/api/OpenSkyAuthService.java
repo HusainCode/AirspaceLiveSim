@@ -13,6 +13,11 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Manages OAuth2 authentication with OpenSky Network API.
+ * Handles token acquisition, in-memory caching, and automatic refresh
+ * to ensure valid credentials are always available for API calls.
+ */
 @Service
 public class OpenSkyAuthService {
 

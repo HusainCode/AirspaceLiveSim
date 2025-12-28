@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * REST endpoint for querying and searching flights by criteria.
+ * Provides search capabilities across flight numbers, routes, airlines, etc.
+ */
 @RestController
 @RequestMapping("/api/search")
 public class SearchController {
