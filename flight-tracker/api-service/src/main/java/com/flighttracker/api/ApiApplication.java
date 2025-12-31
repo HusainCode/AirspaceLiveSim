@@ -6,6 +6,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * API Service entry point.
  * Provides REST endpoints and WebSocket support for flight tracking.
+ *
+ * ApiApplication → starts app
+ * StreamController → streams data
+ * OpenSkyFlightService → calls + filters API
+ * OpenSkyAuthService → auth only
+ * OpenSkyProperties → config only
+ * 
  */
 @SpringBootApplication(scanBasePackages = {
         "com.flighttracker.api",
