@@ -17,6 +17,7 @@ import java.time.Duration;
  * Provides shared cache across multiple service instances.
  * Gracefully degrades on Redis failures (returns empty instead of crashing).
  */
+@Profile("prod")
 @Component("redisFlightCache")
 public class RedisFlightCache implements FlightCache {
 

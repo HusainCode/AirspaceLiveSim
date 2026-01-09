@@ -15,6 +15,7 @@ import java.time.Duration;
  * In-memory cache implementation using Caffeine.
  * Provides fast local caching with automatic eviction.
  */
+@Profile("dev")
 @Component("inMemoryFlightCache")
 public class InMemoryFlightCache implements FlightCache {
 

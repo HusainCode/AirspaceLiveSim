@@ -6,6 +6,16 @@ spring:
     name: api-service
 
   profiles:
+    active: dev # or prod
+
+  redis:
+    host: localhost
+    port: 6379
+
+server:
+  port: 8080
+
+  profiles:
     active: dev
 
   redis:
