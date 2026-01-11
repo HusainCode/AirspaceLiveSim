@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.core.ReactiveValueOperations;
-import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
@@ -17,8 +16,6 @@ import java.time.Duration;
  * Provides shared cache across multiple service instances.
  * Gracefully degrades on Redis failures (returns empty instead of crashing).
  */
-@Profile("prod")
-@Component("redisFlightCache")
 public class RedisFlightCache implements FlightCache {
 
     private static final Logger log = LoggerFactory.getLogger(RedisFlightCache.class);

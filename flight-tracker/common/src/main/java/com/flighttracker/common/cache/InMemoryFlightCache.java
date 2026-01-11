@@ -6,7 +6,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
@@ -15,8 +14,6 @@ import java.time.Duration;
  * In-memory cache implementation using Caffeine.
  * Provides fast local caching with automatic eviction.
  */
-@Profile("dev")
-@Component("inMemoryFlightCache")
 public class InMemoryFlightCache implements FlightCache {
 
     private static final Logger log = LoggerFactory.getLogger(InMemoryFlightCache.class);
