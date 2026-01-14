@@ -1,4 +1,4 @@
-package com.flighttracker.api;
+package com.flighttracker.api.integration.opensky;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +19,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * to ensure valid credentials are always available for API calls.
  */
 @Service
-public class OpenSkyAuthService {
+public class OpenSkyAuthClient {
 
-    private static final Logger log = LoggerFactory.getLogger(OpenSkyAuthService.class);
+    private static final Logger log = LoggerFactory.getLogger(OpenSkyAuthClient.class);
     private static final Duration TOKEN_VALIDITY = Duration.ofMinutes(28);
     private static final String AUTH_URI = "/auth/realms/opensky-network/protocol/openid-connect/token";
 
@@ -32,7 +32,7 @@ public class OpenSkyAuthService {
     private volatile String accessToken;
     private volatile Instant expiresAt;
 
-    public OpenSkyAuthService(WebClient.Builder webClientBuilder, OpenSkyProperties properties) {
+    public OpenSkyAuthClient(WebClient.Builder webClientBuilder, OpenSkyProperties properties) {
         this.webClient = webClientBuilder
                 .baseUrl("https://auth.opensky-network.org")
                 .build();

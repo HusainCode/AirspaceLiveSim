@@ -1,4 +1,4 @@
-package com.flighttracker.api;
+package com.flighttracker.api.integration.opensky;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;

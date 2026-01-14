@@ -1,4 +1,4 @@
-package com.flighttracker.api;
+package com.flighttracker.api.config;
 
 /**
  * Spring configuration class for defining application beans.

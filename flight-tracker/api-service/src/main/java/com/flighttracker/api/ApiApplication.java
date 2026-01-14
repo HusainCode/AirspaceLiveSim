@@ -1,7 +1,9 @@
 package com.flighttracker.api;
 
+import com.flighttracker.api.integration.opensky.OpenSkyProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 /**
  * API Service entry point.
@@ -9,10 +11,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  * ApiApplication → starts app
  * StreamController → streams data
- * OpenSkyFlightService → calls + filters API
- * OpenSkyAuthService → auth only
+ * FlightService → calls + filters API
+ * OpenSkyAuthClient → auth only
  * OpenSkyProperties → config only
- * 
+ *
  */
 @SpringBootApplication(scanBasePackages = {
         "com.flighttracker.api",

@@ -1,4 +1,4 @@
-package com.flighttracker.api;
+package com.flighttracker.api.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
