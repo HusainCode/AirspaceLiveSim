@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
  * REST endpoint for individual flight data operations.
  * Handles requests for specific flight details, status, and metadata.
  */
+
+
+// // TODO: Return ResponseEntity instead of String to control HTTP status codes (200, 404, etc.)
+
 @RestController
 @RequestMapping("api/flights")
 public class FlightController {
