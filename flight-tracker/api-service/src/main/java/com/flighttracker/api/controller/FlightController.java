@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 
-// // TODO: Return ResponseEntity instead of String to control HTTP status codes (200, 404, etc.)
+// TODO: Return ResponseEntity instead of String to control HTTP status codes (200, 404, etc.)
 
 @RestController
 @RequestMapping("api/flights")
