@@ -1,13 +1,15 @@
 package com.flighttracker.api.controller;
 
+import com.flighttracker.api.domain.Flight;
+import com.flighttracker.api.service.FlightService;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.http.MediaType;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
-import java.time.Instant;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Server-Sent Events (SSE) endpoint that maintains long-lived connections
@@ -31,13 +33,32 @@ import java.util.Map;
 @RestController
 public class StreamController {
 
+    private final FlightService flightService;
+
+    public StreamController(FlightService flightService) {
+        this.flightService = flightService;
+    }
+
+    /**
+     * Streams all flight positions globally at 5-second intervals.
+     * OpenSky API has rate limits, so we use a longer interval.
+     */
     @GetMapping(value = "/stream/flights", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Map<String, Object>> streamFlights() {
-        return Flux.interval(Duration.ofSeconds(1))
-                .map(tick -> Map.of(
-                        "flightId", "FAKE-" + tick,
-                        "lat", 30.0 + tick * 0.001,
-                        "lon", -97.0 + tick * 0.001,
-                        "timestamp", Instant.now().toString()));
+    public Flux<List<Flight>> streamFlights() {
+        return flightService.streamFlightUpdates(Duration.ofSeconds(5));
+    }
+
+    /**
+     * Streams flight positions within a geographic bounding box.
+     * Useful for tracking flights in a specific region.
+     */
+    @GetMapping(value = "/stream/flights/area", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<List<Flight>> streamFlightsInArea(
+            @RequestParam double minLat,
+            @RequestParam double maxLat,
+            @RequestParam double minLon,
+            @RequestParam double maxLon) {
+        return flightService.streamFlightsInArea(
+                Duration.ofSeconds(5), minLat, maxLat, minLon, maxLon);
     }
 }

@@ -81,4 +81,14 @@ public class OpenSkyAuthClient {
 
         log.info("Token refreshed successfully, expires at {}", expiresAt);
     }
+
+    /**
+     * Adds the authorization header to the given HttpHeaders.
+     */
+    public void addAuthHeaders(org.springframework.http.HttpHeaders headers) {
+        String token = getValidToken();
+        if (token != null) {
+            headers.setBearerAuth(token);
+        }
+    }
 }
