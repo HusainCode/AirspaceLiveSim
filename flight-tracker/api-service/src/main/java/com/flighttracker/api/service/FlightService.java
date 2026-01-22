@@ -2,11 +2,14 @@ package com.flighttracker.api.service;
 
 import com.flighttracker.api.domain.Flight;
 import com.flighttracker.api.integration.opensky.OpenSkyFlightProvider;
+import com.flighttracker.common.model.FlightStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Orchestrates flight data operations.
@@ -38,5 +41,70 @@ public class FlightService {
                                                    double minLon, double maxLon) {
         return Flux.interval(interval)
                 .flatMap(tick -> openSkyProvider.getFlightsInArea(minLat, maxLat, minLon, maxLon));
+    }
+
+    /**
+     * Retrieves a single flight by its ID (icao24 code).
+     * Searches through all current flights from OpenSky.
+     */
+    public Optional<Flight> getFlightById(String id) {
+        if (id == null || id.isBlank()) {
+            return Optional.empty();
+        }
+
+        List<Flight> flights = openSkyProvider.getAllFlights().block();
+        if (flights == null) {
+            return Optional.empty();
+        }
+
+        return flights.stream()
+                .filter(f -> id.equalsIgnoreCase(f.getFlightId()) || id.equalsIgnoreCase(f.getCallsign()))
+                .findFirst();
+    }
+
+    /**
+     * Returns the status of a flight as a string.
+     */
+    public String getFlightByStatus(String id) {
+        return getFlightById(id)
+                .map(Flight::getStatus)
+                .map(FlightStatus::name)
+                .orElse("UNKNOWN");
+    }
+
+    /**
+     * Returns flight metadata including position, timing, and route information.
+     */
+    public Map<String, Object> getFlightMetadata(String id) {
+        return getFlightById(id)
+                .map(flight -> Map.<String, Object>of(
+                        "flightId", nullSafe(flight.getFlightId()),
+                        "callsign", nullSafe(flight.getCallsign()),
+                        "status", nullSafe(flight.getStatus()),
+                        "position", Map.of(
+                                "latitude", flight.getLatitude(),
+                                "longitude", flight.getLongitude(),
+                                "altitude", flight.getAltitude()
+                        ),
+                        "speed", flight.getSpeed(),
+                        "lastUpdated", flight.getLastUpdated(),
+                        "departure", Map.of(
+                                "airportIcao", nullSafe(flight.getDepartureAirportIcao()),
+                                "airportName", nullSafe(flight.getDepartureAirportName()),
+                                "scheduledTime", nullSafe(flight.getScheduledDepartureTime()),
+                                "actualTime", nullSafe(flight.getActualDepartureTime())
+                        ),
+                        "arrival", Map.of(
+                                "airportIcao", nullSafe(flight.getDestinationAirportIcao()),
+                                "airportName", nullSafe(flight.getDestinationAirportName()),
+                                "scheduledTime", nullSafe(flight.getScheduledArrivalTime()),
+                                "estimatedTime", nullSafe(flight.getEstimatedArrivalTime())
+                        )
+                ))
+                .orElse(Map.of());
+    }
+
+    private Object nullSafe(Object value) {
+        return value != null ? value : "";
     }
 }
