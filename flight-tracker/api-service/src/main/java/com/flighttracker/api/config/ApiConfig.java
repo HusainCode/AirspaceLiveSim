@@ -1,8 +1,16 @@
 package com.flighttracker.api.config;
 
-/**
- * Spring configuration class for defining application beans.
- * Used to configure infrastructure components like WebClient, cache managers, etc.
- */
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@Configuration
 public class ApiConfig {
+
+    @Bean
+    public WebClient webClient(WebClient.Builder builder) {
+        return builder
+                .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(16 * 1024 * 1024))
+                .build();
+    }
 }

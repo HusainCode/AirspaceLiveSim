@@ -1,3 +1,7 @@
+plugins {
+    id("java")
+}
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")

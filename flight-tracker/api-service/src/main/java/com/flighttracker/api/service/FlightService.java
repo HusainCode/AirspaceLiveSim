@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -102,6 +103,101 @@ public class FlightService {
                         )
                 ))
                 .orElse(Map.of());
+    }
+
+    public List<Flight> searchFlights(String query) {
+        if (query == null || query.isBlank()) {
+            return Collections.emptyList();
+        }
+
+        List<Flight> flights = openSkyProvider.getAllFlights().block();
+        if (flights == null) {
+            return Collections.emptyList();
+        }
+
+        String lowerQuery = query.toLowerCase();
+        return flights.stream()
+                .filter(f -> matchesFlight(f, lowerQuery))
+                .toList();
+    }
+
+    public List<Flight> searchByCallsign(String callsign) {
+        if (callsign == null || callsign.isBlank()) {
+            return Collections.emptyList();
+        }
+
+        List<Flight> flights = openSkyProvider.getAllFlights().block();
+        if (flights == null) {
+            return Collections.emptyList();
+        }
+
+        String lowerCallsign = callsign.toLowerCase();
+        return flights.stream()
+                .filter(f -> f.getCallsign() != null && f.getCallsign().toLowerCase().contains(lowerCallsign))
+                .toList();
+    }
+
+    public List<Flight> searchByDepartureAirport(String icao) {
+        if (icao == null || icao.isBlank()) {
+            return Collections.emptyList();
+        }
+
+        List<Flight> flights = openSkyProvider.getAllFlights().block();
+        if (flights == null) {
+            return Collections.emptyList();
+        }
+
+        String upperIcao = icao.toUpperCase();
+        return flights.stream()
+                .filter(f -> upperIcao.equals(f.getDepartureAirportIcao()))
+                .toList();
+    }
+
+    public List<Flight> searchByArrivalAirport(String icao) {
+        if (icao == null || icao.isBlank()) {
+            return Collections.emptyList();
+        }
+
+        List<Flight> flights = openSkyProvider.getAllFlights().block();
+        if (flights == null) {
+            return Collections.emptyList();
+        }
+
+        String upperIcao = icao.toUpperCase();
+        return flights.stream()
+                .filter(f -> upperIcao.equals(f.getDestinationAirportIcao()))
+                .toList();
+    }
+
+    public List<Flight> searchByAirport(String icao) {
+        if (icao == null || icao.isBlank()) {
+            return Collections.emptyList();
+        }
+
+        List<Flight> flights = openSkyProvider.getAllFlights().block();
+        if (flights == null) {
+            return Collections.emptyList();
+        }
+
+        String upperIcao = icao.toUpperCase();
+        return flights.stream()
+                .filter(f -> upperIcao.equals(f.getDepartureAirportIcao()) ||
+                             upperIcao.equals(f.getDestinationAirportIcao()))
+                .toList();
+    }
+
+    private boolean matchesFlight(Flight flight, String query) {
+        return containsIgnoreCase(flight.getFlightId(), query) ||
+               containsIgnoreCase(flight.getCallsign(), query) ||
+               containsIgnoreCase(flight.getFlightNumber(), query) ||
+               containsIgnoreCase(flight.getDepartureAirportIcao(), query) ||
+               containsIgnoreCase(flight.getDestinationAirportIcao(), query) ||
+               containsIgnoreCase(flight.getDepartureAirportName(), query) ||
+               containsIgnoreCase(flight.getDestinationAirportName(), query);
+    }
+
+    private boolean containsIgnoreCase(String str, String query) {
+        return str != null && str.toLowerCase().contains(query);
     }
 
     private Object nullSafe(Object value) {
